@@ -1,0 +1,125 @@
+title: "JHU DKPS based per-instance metric prediction"
+description: |
+  We can predict whether a particular model will produce the correct output based on the performance of similar models in Data Kernel Perspective Space (DKPS)
+
+claim:
+  python: |
+    assert computed_auc > auc_threshold, assert_failed_msg
+
+
+symbols:
+  helm_suite_path:
+    type: str
+    value: '/home/local/KHQ/david.joy/AIQ/data/crfm-helm-public/lite/benchmark_output/runs/_all'
+
+  metric:
+    type: str
+    value: "exact_match"
+
+  auc_threshold:
+    type: float
+    value: 0.5
+
+  assert_failed_msg:
+    type: str
+    depends:
+      - auc_threshold
+    python: |
+      assert_failed_msg = "AUC was not above expected threshold of: {:0.3f}".format(auc_threshold)
+    
+  random_seed:
+    type: int
+    value: 2
+    
+  predictor:
+    type: object
+    depends:
+      - random_seed
+    python: |      
+      from jhu_ta1.algorithms.dkps_instance_predictor import DKPSInstancePredictor
+
+      import numpy as np
+      np.random.seed(random_seed)
+
+      predictor = DKPSInstancePredictor(
+          random_seed=random_seed,
+          num_example_runs=50,
+          num_eval_samples=8,
+          n_components_cmds=8)
+
+  predict_inputs:
+    type: tuple
+    depends:
+      - helm_suite_path
+      - suite
+      - predictor
+    python: |
+      train_split, test_split = predictor.prepare_all_dataframes(helm_suite_path)
+
+      predict_inputs = (train_split, test_split)
+
+  train_split:
+    type: object
+    depends:
+      - predict_inputs
+    python: |
+      train_split, _ = predict_inputs
+      
+  test_split:
+    type: object
+    depends:
+      - predict_inputs
+    python: |
+      _, test_split = predict_inputs
+
+  sequestered_test_split:
+    type: object
+    depends:
+      - test_split
+    python: |
+      sequestered_test_split = test_split.sequester()
+
+  predictions:
+    type: list[object]
+    depends:
+      - predictor
+      - train_split
+      - sequestered_test_split
+    python: |
+      predictions = predictor.predict(train_split, sequestered_test_split)
+
+  prediction_comparisons:
+    type: object
+    depends:
+      - predictor
+      - predictions
+      - test_split
+    python: |
+      from magnet.instance_predictor import InstancePrediction
+      
+      prediction_comparisons = predictor.compare_predicted_to_actual(
+          InstancePrediction.to_df(predictions),
+          test_split.per_instance_stats)
+
+  compute_auc:
+    type: object
+    python: |
+      import pandas as pd
+      from sklearn.metrics import roc_auc_score
+
+      def compute_auc(df_prediction, metric):
+          df_prediction = df_prediction[df_prediction['stat_name'] == metric]
+          y             = df_prediction['actual_mean']
+          y_hat         = df_prediction['predicted_mean']
+          auc           = roc_auc_score(y, y_hat)
+
+          return auc
+
+  computed_auc:
+    type: float
+    depends:
+      - compute_auc
+      - prediction_comparisons
+      - metric
+    python: |
+      computed_auc = compute_auc(prediction_comparisons, metric)

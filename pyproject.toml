@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools >= 80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+namespaces = true
+include = ["jhu_ta1*"]
+
+[tool.setuptools.package-data]
+jhu_ta1 = ["cards/*.yaml"]
+
+[tool.setuptools.dynamic]
+version = {attr = "jhu_ta1.__version__"}
+
+[project]
+name = "jhu_ta1"
+dynamic = ["version"]
+description = "Kitware's MAGNET framework for AIQ"
+authors = [
+    {name = "MAGNET Kitware", email = "aiq-ta2@kitware.com"}
+]
+urls = { "Repository" = "https://github.com/AIQ-Kitware/aiq-magnet/" }
+requires-python = ">=3.11"
+dependencies = [
+    "aiq-magnet @ git+https://github.com/AIQ-Kitware/aiq-magnet",
+    "dkps @ git+https://github.com/jataware/dkps",
+    "httpx>=0.28.1,<0.29",
+]
