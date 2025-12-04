@@ -252,4 +252,4 @@ if __name__ == "__main__":
         n_components_cmds = args.n_components_cmds,
     )
 
-    predictor(args.helm_suite_path)
+    predictor(helm_suites=args.helm_suite_path)

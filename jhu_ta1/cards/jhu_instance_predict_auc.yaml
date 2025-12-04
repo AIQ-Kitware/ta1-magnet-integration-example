@@ -10,7 +10,7 @@ claim:
 symbols:
   helm_suite_path:
     type: str
-    value: '/home/local/KHQ/david.joy/AIQ/data/crfm-helm-public/lite/benchmark_output/runs/_all'
+    value: 'data/crfm-helm-public/lite/benchmark_output/runs/_all'
 
   metric:
     type: str
@@ -26,16 +26,17 @@ symbols:
       - auc_threshold
     python: |
       assert_failed_msg = "AUC was not above expected threshold of: {:0.3f}".format(auc_threshold)
-    
+
   random_seed:
     type: int
-    value: 2
-    
+    # value: 2
+    sweep: [1, 2, 3]
+
   predictor:
     type: object
     depends:
       - random_seed
-    python: |      
+    python: |
       from jhu_ta1.algorithms.dkps_instance_predictor import DKPSInstancePredictor
 
       import numpy as np
@@ -54,7 +55,12 @@ symbols:
       - suite
       - predictor
     python: |
-      train_split, test_split = predictor.prepare_all_dataframes(helm_suite_path)
+      from magnet.helm_outputs import HelmSuites
+
+      helm_suites = HelmSuites.coerce(helm_suite_path)
+      helm_runs = helm_suites.runs()
+
+      train_split, test_split = predictor.prepare_all_dataframes(helm_runs=helm_runs)
 
       predict_inputs = (train_split, test_split)
 
@@ -64,7 +70,7 @@ symbols:
       - predict_inputs
     python: |
       train_split, _ = predict_inputs
-      
+
   test_split:
     type: object
     depends:
@@ -96,7 +102,7 @@ symbols:
       - test_split
     python: |
       from magnet.instance_predictor import InstancePrediction
-      
+
       prediction_comparisons = predictor.compare_predicted_to_actual(
           InstancePrediction.to_df(predictions),
           test_split.per_instance_stats)
