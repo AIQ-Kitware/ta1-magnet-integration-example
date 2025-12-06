@@ -22,7 +22,7 @@ authors = [
 urls = { "Repository" = "https://github.com/AIQ-Kitware/aiq-magnet/" }
 requires-python = ">=3.11"
 dependencies = [
-    "aiq-magnet @ git+https://github.com/AIQ-Kitware/aiq-magnet@a802afe",
+    "aiq-magnet[optional] @ git+https://github.com/AIQ-Kitware/aiq-magnet@a802afe",
     "dkps @ git+https://github.com/jataware/dkps",
     "httpx>=0.28.1,<0.29",
 ]
