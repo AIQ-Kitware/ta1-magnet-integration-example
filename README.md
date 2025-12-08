@@ -42,7 +42,12 @@ If you do already have them downloaded but not linked into a single
 mkdir -p data/crfm-helm-public/lite/benchmark_output/runs/_all
 cd data/crfm-helm-public/lite/benchmark_output/runs/_all
 ln -s /path/to/existing/helm/lite/runs/*/med_qa* .
+cd -
 ```
+
+(Note: as there are some duplicate runs across versions, it's safe to
+ignore warnings about files / links already existing when running the
+`ln` command)
 
 ## Running the card
 
@@ -97,6 +102,8 @@ Resolving: compute_auc
 Resolving: computed_auc
 ...
 ```
+
+(Note: it's safe to ignore warnings about "dkps.embed: unable to load google-genai")
 
 Once the card has been fully evaluated, you should see the following:
 
