@@ -1,3 +1,10 @@
+This repository contains an example TA1 algorithm integrated with the
+MAGNET evaluation framework.
+
+The example algorithm, provided by the JHU team, predicts whether or
+not a model will produce the correct answer for a given question based
+on the performance of similar models in Data Kernel Perspective Space (DKPS) [1]
+
 ## Setup
 
 ### Python environment
@@ -120,3 +127,7 @@ have been evaluated (the example card sweeps over three different seed
 values for random evaluation set selection).  In this case all three
 variations have been verified (claim passed), so the final `RESULT` of
 the card is that it is `"VERIFIED"`.
+
+## Citations
+
+[1] Hayden Helm, Aranyak Acharyya, Youngser Park, Brandon Duderstadt, and Carey Priebe. 2025. Statistical inference on black-box generative models in the data kernel perspective space. In Findings of the Association for Computational Linguistics: ACL 2025, pages 3955–3970, Vienna, Austria. Association for Computational Linguistics.

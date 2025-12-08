@@ -15,7 +15,7 @@ version = {attr = "jhu_ta1.__version__"}
 [project]
 name = "jhu_ta1"
 dynamic = ["version"]
-description = "Kitware's MAGNET framework for AIQ"
+description = "Example TA1 algorithm implementation for MAGNET"
 authors = [
     {name = "MAGNET Kitware", email = "aiq-ta2@kitware.com"}
 ]
