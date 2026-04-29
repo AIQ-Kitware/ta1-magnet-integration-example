@@ -135,6 +135,24 @@ values for random evaluation set selection).  In this case all three
 variations have been verified (claim passed), so the final `RESULT` of
 the card is that it is `"VERIFIED"`.
 
+Results from the card evaluation are by default written into
+`evaluation_runs` (you can change the output directory with the
+`--output_path` argument on `magnet evaluate`).  E.g.:
+
+```
+evaluation_runs
+└── 8d94d5a2_2026-04-29__08-55-13   # Timestamped directory per card evaluation
+    ├── card.yaml                   # Original evaluation card YAML
+    ├── results
+    │   ├── cf2c9d8920b1            # One subdirectory for each parameter set in the sweep
+    │   │   └── verdict.json        # Claim result for this parameter set
+    │   ├── f282c9d03dbd
+    │   │   └── verdict.json
+    │   └── f2af6eb66e70
+    │       └── verdict.json
+    └── verdict.json                # Aggregate result over all claims
+```
+
 ## Citations
 
 [1] Hayden Helm, Aranyak Acharyya, Youngser Park, Brandon Duderstadt, and Carey Priebe. 2025. Statistical inference on black-box generative models in the data kernel perspective space. In Findings of the Association for Computational Linguistics: ACL 2025, pages 3955–3970, Vienna, Austria. Association for Computational Linguistics.
