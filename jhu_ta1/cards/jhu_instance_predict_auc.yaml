@@ -2,6 +2,34 @@ title: "JHU DKPS based per-instance metric prediction"
 description: |
   We can predict whether a particular model will produce the correct output based on the performance of similar models in Data Kernel Perspective Space (DKPS)
 
+version: 1.0  # No enforced convention or numbering here
+
+organizations:
+  - JHU
+
+submitter:
+  name: Kitware TA2 Team
+  email: aiq-ta2@kitware.com
+
+tags:
+  - benchmark-prediction
+  - med_qa
+  - helm
+  # meant to be either 'specific-problem', 'classes-of-problems',
+  # 'natural-classes-of-problems'
+  - specific-problem
+
+links:
+  - title: "Statistical inference on black-box generative models in the data kernel perspective space"
+    url: "https://arxiv.org/abs/2410.01106"
+    type: "publication"
+  - title: "med_qa"
+    url: "https://huggingface.co/datasets/bigbio/med_qa"
+    type: "dataset"
+  - title: "Precomputed HELM lite benchmark outputs"
+    url: "https://console.cloud.google.com/storage/browser/crfm-helm-public/lite"
+    type: "asset"
+
 claim:
   python: |
     assert computed_auc > auc_threshold, assert_failed_msg
